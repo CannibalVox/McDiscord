@@ -49,4 +49,10 @@ public class GuildModel {
         this.discordPlayerCount = packet.getMemberCount();
         this.inviteLink = packet.getChannelInvite();
     }
+
+    public void setGuildId(String guildId) {
+        this.guildId = guildId;
+        this.discordPlayerCount = 0;
+        this.inviteLink = null;
+    }
 }

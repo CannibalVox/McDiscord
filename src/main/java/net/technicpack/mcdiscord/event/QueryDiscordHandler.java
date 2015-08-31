@@ -30,15 +30,19 @@ public class QueryDiscordHandler {
         if (ticksUntilQuery <= 0) {
             ticksUntilQuery = 20 * 15;
 
-            this.discordApi.getGuild(model.getGuildId(), new DiscordCallback<Guild>(true) {
-                @Override
-                public void callback(Guild result) {
-                    if (result != null && !McDiscord.proxy.getGuildModel().equals(result)) {
-                        McDiscord.proxy.getGuildModel().updateGuild(result);
-                        DiscordNetwork.sendToAllPlayers(new UpdateGuildPacket(result));
-                    }
-                }
-            });
+            forceQuery();
         }
+    }
+
+    public void forceQuery() {
+        this.discordApi.getGuild(model.getGuildId(), new DiscordCallback<Guild>(true) {
+            @Override
+            public void callback(Guild result) {
+                if (result != null && !McDiscord.proxy.getGuildModel().equals(result)) {
+                    McDiscord.proxy.getGuildModel().updateGuild(result);
+                    DiscordNetwork.sendToAllPlayers(new UpdateGuildPacket(result));
+                }
+            }
+        });
     }
 }

@@ -5,9 +5,11 @@ import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import cpw.mods.fml.common.*;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.versioning.DefaultArtifactVersion;
 import net.minecraftforge.common.config.Configuration;
+import net.technicpack.mcdiscord.commands.SetDiscordServer;
 import net.technicpack.mcdiscord.coremod.DiscordResourcePack;
 import net.technicpack.mcdiscord.data.GuildModel;
 import net.technicpack.mcdiscord.discord.api.IAuthedDiscordApi;
@@ -66,6 +68,7 @@ public class McDiscord extends DummyModContainer {
         }
     }
 
+    private QueryDiscordHandler queryDiscordHandler;
     @Subscribe
     public void preInit(FMLPreInitializationEvent event) {
         initProxy("net.technicpack.mcdiscord.CommonProxy", "net.technicpack.mcdiscord.client.ClientProxy");
@@ -86,9 +89,15 @@ public class McDiscord extends DummyModContainer {
 
         IDiscordApi api = DiscordFactory.createDiscordApi(responseHandler);
 
-        FMLCommonHandler.instance().bus().register(new QueryDiscordHandler(api, model));
+        queryDiscordHandler = new QueryDiscordHandler(api, model);
+        FMLCommonHandler.instance().bus().register(queryDiscordHandler);
 
         proxy.registerHudHandler();
     }
 
+    @Subscribe
+    public void serverLoad(FMLServerStartingEvent event)
+    {
+        event.registerServerCommand(new SetDiscordServer(queryDiscordHandler));
+    }
 }
