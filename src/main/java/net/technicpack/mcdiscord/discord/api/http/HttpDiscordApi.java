@@ -66,7 +66,7 @@ public class HttpDiscordApi implements IAuthedDiscordApi {
     }
 
     protected void synchronousGetGuild(String guildId, DiscordCallback<Guild> callback) {
-        String guildUrl = this.url + "guilds/" + guildId + "/embed.json";
+        String guildUrl = this.url + "servers/" + guildId + "/widget.json";
 
         Guild guild = null;
 
