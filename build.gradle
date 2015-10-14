@@ -19,7 +19,7 @@ apply plugin: 'forge'
 
 defaultTasks 'clean', 'build'
 
-version = "1.0.1"
+version = "2.0.0"
 group= "net.technicpack" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "mcdiscord"
 
