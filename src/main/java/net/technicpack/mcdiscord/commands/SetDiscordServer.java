@@ -3,11 +3,9 @@ package net.technicpack.mcdiscord.commands;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.technicpack.mcdiscord.McDiscord;
-import net.technicpack.mcdiscord.data.GuildModel;
-import net.technicpack.mcdiscord.discord.io.guild.Guild;
 import net.technicpack.mcdiscord.event.QueryDiscordHandler;
 import net.technicpack.mcdiscord.network.DiscordNetwork;
-import net.technicpack.mcdiscord.network.packet.UpdateGuildPacket;
+import net.technicpack.mcdiscord.network.packet.UpdateServerPacket;
 
 public class SetDiscordServer extends CommandBase {
 
@@ -30,13 +28,13 @@ public class SetDiscordServer extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
-            McDiscord.proxy.getGuildModel().setGuildId("");
-            DiscordNetwork.sendToAllPlayers(new UpdateGuildPacket(McDiscord.proxy.getGuildModel()));
+            McDiscord.proxy.getServerModel().setServerId("");
+            DiscordNetwork.sendToAllPlayers(new UpdateServerPacket(McDiscord.proxy.getServerModel()));
             return;
         }
 
-        String guildId = args[0];
-        McDiscord.proxy.getGuildModel().setGuildId(guildId);
+        String serverId = args[0];
+        McDiscord.proxy.getServerModel().setServerId(serverId);
         queryDiscordHandler.forceQuery();
     }
 }

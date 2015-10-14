@@ -1,6 +1,5 @@
 package net.technicpack.mcdiscord.network;
 
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -9,8 +8,8 @@ import io.netty.channel.ChannelHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.technicpack.mcdiscord.McDiscord;
-import net.technicpack.mcdiscord.network.handlers.UpdateGuildPacketHandler;
-import net.technicpack.mcdiscord.network.packet.UpdateGuildPacket;
+import net.technicpack.mcdiscord.network.handlers.UpdateServerPacketHandler;
+import net.technicpack.mcdiscord.network.packet.UpdateServerPacket;
 
 @ChannelHandler.Sharable
 public class DiscordNetwork {
@@ -19,7 +18,7 @@ public class DiscordNetwork {
 
     public static void init() {
         INSTANCE.networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(McDiscord.MODID);
-        INSTANCE.networkWrapper.registerMessage(UpdateGuildPacketHandler.class, UpdateGuildPacket.class, 0, Side.CLIENT);
+        INSTANCE.networkWrapper.registerMessage(UpdateServerPacketHandler.class, UpdateServerPacket.class, 0, Side.CLIENT);
     }
 
     public static void sendToAllPlayers(IMessage packet) {

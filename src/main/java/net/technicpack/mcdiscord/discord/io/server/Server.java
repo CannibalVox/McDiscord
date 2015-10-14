@@ -1,11 +1,11 @@
-package net.technicpack.mcdiscord.discord.io.guild;
+package net.technicpack.mcdiscord.discord.io.server;
 
 import net.technicpack.mcdiscord.discord.io.channel.ChannelInfo;
 import net.technicpack.mcdiscord.discord.io.member.MemberInfo;
 
 import java.util.List;
 
-public class Guild {
+public class Server {
     private String id;
     private String name;
     private String instant_invite;

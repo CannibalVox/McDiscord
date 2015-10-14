@@ -8,7 +8,7 @@ import net.technicpack.mcdiscord.event.HudHandler;
 public class ClientProxy extends CommonProxy {
     @Override
     public void registerHudHandler() {
-        HudHandler handler = new HudHandler(getGuildModel());
+        HudHandler handler = new HudHandler(getServerModel());
         FMLCommonHandler.instance().bus().register(handler);
         MinecraftForge.EVENT_BUS.register(handler);
     }

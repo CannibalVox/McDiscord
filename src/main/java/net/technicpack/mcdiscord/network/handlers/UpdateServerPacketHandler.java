@@ -4,12 +4,12 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import net.technicpack.mcdiscord.McDiscord;
-import net.technicpack.mcdiscord.network.packet.UpdateGuildPacket;
+import net.technicpack.mcdiscord.network.packet.UpdateServerPacket;
 
-public class UpdateGuildPacketHandler implements IMessageHandler<UpdateGuildPacket, IMessage> {
+public class UpdateServerPacketHandler implements IMessageHandler<UpdateServerPacket, IMessage> {
     @Override
-    public IMessage onMessage(UpdateGuildPacket message, MessageContext ctx) {
-        McDiscord.proxy.getGuildModel().updateGuild(message);
+    public IMessage onMessage(UpdateServerPacket message, MessageContext ctx) {
+        McDiscord.proxy.getServerModel().updateServer(message);
 
         return null;
     }

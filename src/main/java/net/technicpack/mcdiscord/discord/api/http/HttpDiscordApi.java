@@ -1,14 +1,13 @@
 package net.technicpack.mcdiscord.discord.api.http;
 
 import com.google.gson.Gson;
-import com.mojang.authlib.HttpAuthenticationService;
 import cpw.mods.fml.common.FMLLog;
 import net.technicpack.mcdiscord.discord.callback.DiscordCallback;
 import net.technicpack.mcdiscord.discord.api.IAuthedDiscordApi;
 import net.technicpack.mcdiscord.discord.callback.DiscordResponseHandler;
 import net.technicpack.mcdiscord.discord.io.auth.AuthRequest;
 import net.technicpack.mcdiscord.discord.io.auth.AuthResponse;
-import net.technicpack.mcdiscord.discord.io.guild.Guild;
+import net.technicpack.mcdiscord.discord.io.server.Server;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 
@@ -43,14 +42,14 @@ public class HttpDiscordApi implements IAuthedDiscordApi {
     }
 
     @Override
-    public void getGuild(final String guildId, final DiscordCallback<Guild> callback) {
-        if (guildId == null || guildId.isEmpty())
+    public void getServer(final String serverId, final DiscordCallback<Server> callback) {
+        if (serverId == null || serverId.isEmpty())
             return;
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                synchronousGetGuild(guildId, callback);
+                synchronousGetServer(serverId, callback);
             }
         }).start();
     }
@@ -65,18 +64,18 @@ public class HttpDiscordApi implements IAuthedDiscordApi {
         }).start();
     }
 
-    protected void synchronousGetGuild(String guildId, DiscordCallback<Guild> callback) {
-        String guildUrl = this.url + "servers/" + guildId + "/widget.json";
+    protected void synchronousGetServer(String serverId, DiscordCallback<Server> callback) {
+        String serverUrl = this.url + "servers/" + serverId + "/widget.json";
 
-        Guild guild = null;
+        Server server = null;
 
         try {
-            guild = getRestObject(Guild.class, guildUrl);
+            server = getRestObject(Server.class, serverUrl);
         } catch (IOException ex) {
-            FMLLog.getLogger().error("Error pulling guild from Discord.", ex);
+            FMLLog.getLogger().error("Error pulling server from Discord.", ex);
         }
 
-        postCallback(guild, callback);
+        postCallback(server, callback);
     }
 
     protected void synchronousAuthenticate(AuthRequest request, DiscordCallback<IAuthedDiscordApi> callback) {

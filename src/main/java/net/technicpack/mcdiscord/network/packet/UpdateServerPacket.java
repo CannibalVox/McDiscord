@@ -3,13 +3,13 @@ package net.technicpack.mcdiscord.network.packet;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
-import net.technicpack.mcdiscord.data.GuildModel;
-import net.technicpack.mcdiscord.discord.io.guild.Guild;
+import net.technicpack.mcdiscord.data.ServerModel;
+import net.technicpack.mcdiscord.discord.io.server.Server;
 
-public class UpdateGuildPacket implements IMessage {
+public class UpdateServerPacket implements IMessage {
 
-    private String guildId;
-    public String getGuildId() { return this.guildId; }
+    private String serverId;
+    public String getServerId() { return this.serverId; }
 
     private int memberCount;
     public int getMemberCount() { return this.memberCount; }
@@ -17,22 +17,22 @@ public class UpdateGuildPacket implements IMessage {
     private String channelInvite;
     public String getChannelInvite() { return this.channelInvite; }
 
-    public UpdateGuildPacket() {}
-    public UpdateGuildPacket(Guild guild) {
-        this.guildId = guild.getId();
-        this.memberCount = guild.getMemberCount();
-        this.channelInvite = guild.getInviteLink();
+    public UpdateServerPacket() {}
+    public UpdateServerPacket(Server server) {
+        this.serverId = server.getId();
+        this.memberCount = server.getMemberCount();
+        this.channelInvite = server.getInviteLink();
     }
 
-    public UpdateGuildPacket(GuildModel guild) {
-        this.guildId = guild.getGuildId();
-        this.memberCount = guild.getDiscordPlayerCount();
-        this.channelInvite = guild.getInviteLink();
+    public UpdateServerPacket(ServerModel server) {
+        this.serverId = server.getServerId();
+        this.memberCount = server.getDiscordPlayerCount();
+        this.channelInvite = server.getInviteLink();
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        this.guildId = readString(buf);
+        this.serverId = readString(buf);
         this.memberCount = buf.readInt();
         this.channelInvite = readString(buf);
     }
@@ -40,7 +40,7 @@ public class UpdateGuildPacket implements IMessage {
     @Override
     public void toBytes(ByteBuf buf) {
 
-        writeString(buf, this.guildId);
+        writeString(buf, this.serverId);
         buf.writeInt(this.memberCount);
         writeString(buf, this.channelInvite);
     }

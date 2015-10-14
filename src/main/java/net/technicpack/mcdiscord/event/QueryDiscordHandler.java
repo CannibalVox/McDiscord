@@ -3,18 +3,18 @@ package net.technicpack.mcdiscord.event;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import net.technicpack.mcdiscord.McDiscord;
-import net.technicpack.mcdiscord.data.GuildModel;
+import net.technicpack.mcdiscord.data.ServerModel;
 import net.technicpack.mcdiscord.discord.api.IDiscordApi;
 import net.technicpack.mcdiscord.discord.callback.DiscordCallback;
-import net.technicpack.mcdiscord.discord.io.guild.Guild;
+import net.technicpack.mcdiscord.discord.io.server.Server;
 import net.technicpack.mcdiscord.network.DiscordNetwork;
-import net.technicpack.mcdiscord.network.packet.UpdateGuildPacket;
+import net.technicpack.mcdiscord.network.packet.UpdateServerPacket;
 
 public class QueryDiscordHandler {
     private IDiscordApi discordApi;
-    private GuildModel model;
+    private ServerModel model;
 
-    public QueryDiscordHandler(IDiscordApi discordApi, GuildModel model) {
+    public QueryDiscordHandler(IDiscordApi discordApi, ServerModel model) {
         this.discordApi = discordApi;
         this.model = model;
     }
@@ -35,12 +35,12 @@ public class QueryDiscordHandler {
     }
 
     public void forceQuery() {
-        this.discordApi.getGuild(model.getGuildId(), new DiscordCallback<Guild>(true) {
+        this.discordApi.getServer(model.getServerId(), new DiscordCallback<Server>(true) {
             @Override
-            public void callback(Guild result) {
-                if (result != null && !McDiscord.proxy.getGuildModel().equals(result)) {
-                    McDiscord.proxy.getGuildModel().updateGuild(result);
-                    DiscordNetwork.sendToAllPlayers(new UpdateGuildPacket(result));
+            public void callback(Server result) {
+                if (result != null && !McDiscord.proxy.getServerModel().equals(result)) {
+                    McDiscord.proxy.getServerModel().updateServer(result);
+                    DiscordNetwork.sendToAllPlayers(new UpdateServerPacket(result));
                 }
             }
         });

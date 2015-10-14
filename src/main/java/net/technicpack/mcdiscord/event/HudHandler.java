@@ -2,7 +2,6 @@ package net.technicpack.mcdiscord.event;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -11,11 +10,9 @@ import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.technicpack.mcdiscord.data.GuildModel;
+import net.technicpack.mcdiscord.data.ServerModel;
 import org.lwjgl.opengl.GL11;
 
 import java.net.URI;
@@ -25,12 +22,12 @@ public class HudHandler {
     private ResourceLocation minecraftPlayers = new ResourceLocation("mcdiscord:textures/gui/mc.png");
     private ResourceLocation discordText = new ResourceLocation("mcdiscord:textures/gui/discord.png");
 
-    private GuildModel guildModel;
+    private ServerModel serverModel;
 
     public static HudHandler INSTANCE;
 
-    public HudHandler(GuildModel guildModel) {
-        this.guildModel = guildModel;
+    public HudHandler(ServerModel serverModel) {
+        this.serverModel = serverModel;
         this.INSTANCE = this;
     }
 
@@ -39,14 +36,14 @@ public class HudHandler {
         final Minecraft minecraft = Minecraft.getMinecraft();
         ScaledResolution sr = new ScaledResolution(minecraft, minecraft.displayWidth, minecraft.displayHeight);
 
-        if (INSTANCE.guildModel.getInviteLink() != null && !INSTANCE.guildModel.getInviteLink().isEmpty() && xPos >= 48 && xPos < 160 && yPos >= sr.getScaledHeight() - 32 && yPos < sr.getScaledHeight() - 20) {
+        if (INSTANCE.serverModel.getInviteLink() != null && !INSTANCE.serverModel.getInviteLink().isEmpty() && xPos >= 48 && xPos < 160 && yPos >= sr.getScaledHeight() - 32 && yPos < sr.getScaledHeight() - 20) {
             try
             {
-                final URI uri = new URI(INSTANCE.guildModel.getInviteLink());
+                final URI uri = new URI(INSTANCE.serverModel.getInviteLink());
 
                 if (!uri.getScheme().toLowerCase().equals("http") && !uri.getScheme().toLowerCase().equals("https"))
                 {
-                    throw new URISyntaxException(INSTANCE.guildModel.getInviteLink(), "Unsupported protocol: " + uri.getScheme().toLowerCase());
+                    throw new URISyntaxException(INSTANCE.serverModel.getInviteLink(), "Unsupported protocol: " + uri.getScheme().toLowerCase());
                 }
 
                 visitLink(uri);
@@ -83,7 +80,7 @@ public class HudHandler {
         if (!minecraft.isGuiEnabled())
             return;
 
-        if (guildModel.getGuildId() == null || guildModel.getGuildId().isEmpty())
+        if (serverModel.getServerId() == null || serverModel.getServerId().isEmpty())
             return;
 
         if (minecraft.ingameGUI == null)
@@ -151,7 +148,7 @@ public class HudHandler {
         minecraft.getTextureManager().bindTexture(discordText);
         renderTex(48, 5, 12, 12);
 
-        int discordTextPlayerCount = guildModel.getDiscordPlayerCount();
+        int discordTextPlayerCount = serverModel.getDiscordPlayerCount();
         playerCount = Integer.toString(discordTextPlayerCount);
         minecraft.fontRenderer.drawStringWithShadow(playerCount, 65, 8, 0xFFFFFF + (chatAlpha << 24));
 
